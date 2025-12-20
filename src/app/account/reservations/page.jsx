@@ -2,6 +2,10 @@ import { ROUTES } from "@/config";
 import ReservationCard from "@/src/components/ReservationCard";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Reservations",
+};
+
 export default function ReservationsPage() {
   // CHANGE
   const bookings = [];
