@@ -1,9 +1,15 @@
 import "@/src/styles/globals.css";
 import Logo from "@/src/components/Logo";
 import Navigation from "@/src/components/Navigation";
+import { WEBSITE_NAME } from "@/config";
 
 export const metadata = {
-  title: "The Wild Oasis",
+  title: {
+    template: `%s / ${WEBSITE_NAME}`,
+    default: WEBSITE_NAME,
+  },
+  description:
+    "Luxurious cabin hotel, located in the heart of the Italian Dolomites, surrounded by beautiful mountains and dark forests",
 };
 
 export default function RootLayout({ children }) {
