@@ -3,19 +3,31 @@ import { ROUTES } from "@/config";
 
 export default function Navigation() {
   return (
-    <nav>
-      <ul>
+    <nav className="z-10 text-xl">
+      <ul className="flex gap-16 items-center">
         <li>
-          <Link href={ROUTES.home}>Home</Link>
+          <Link
+            href={ROUTES.cabins}
+            className="hover:text-accent-400 transition-colors"
+          >
+            Cabins
+          </Link>
         </li>
         <li>
-          <Link href={ROUTES.cabins}>Cabins</Link>
+          <Link
+            href={ROUTES.about}
+            className="hover:text-accent-400 transition-colors"
+          >
+            About
+          </Link>
         </li>
         <li>
-          <Link href={ROUTES.about}>About</Link>
-        </li>
-        <li>
-          <Link href={ROUTES.account}>Your account</Link>
+          <Link
+            href={ROUTES.account}
+            className="hover:text-accent-400 transition-colors"
+          >
+            Guest area
+          </Link>
         </li>
       </ul>
     </nav>
