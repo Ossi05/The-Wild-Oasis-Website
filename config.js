@@ -4,5 +4,10 @@ export const ROUTES = {
   home: "/",
   cabins: "/cabins",
   about: "/about",
-  account: "/account",
+  accountRoutes: {
+    root: "/account",
+    profile: "/account/profile",
+    reservations: "/account/reservations",
+  },
+  editPrefix: "/edit",
 };

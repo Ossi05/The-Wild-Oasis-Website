@@ -1,6 +1,6 @@
-import SelectCountry from "@/app/_components/SelectCountry";
+import SelectCountry from "@/src/components/SelectCountry";
 
-export default function Page() {
+export default function ProfilePage() {
   // CHANGE
   const countryFlag = "pt.jpg";
   const nationality = "portugal";

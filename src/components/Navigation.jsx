@@ -23,7 +23,7 @@ export default function Navigation() {
         </li>
         <li>
           <Link
-            href={ROUTES.account}
+            href={ROUTES.accountRoutes.root}
             className="hover:text-accent-400 transition-colors"
           >
             Guest area

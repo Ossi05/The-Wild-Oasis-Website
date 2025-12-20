@@ -1,6 +1,8 @@
-import ReservationCard from "./ReservationCard";
+import { ROUTES } from "@/config";
+import ReservationCard from "@/src/components/ReservationCard";
+import Link from "next/link";
 
-export default function Page() {
+export default function ReservationsPage() {
   // CHANGE
   const bookings = [];
 
@@ -13,13 +15,13 @@ export default function Page() {
       {bookings.length === 0 ? (
         <p className="text-lg">
           You have no reservations yet. Check out our{" "}
-          <a className="underline text-accent-500" href="/cabins">
+          <Link className="underline text-accent-500" href={ROUTES.cabins}>
             luxury cabins &rarr;
-          </a>
+          </Link>
         </p>
       ) : (
         <ul className="space-y-6">
-          {bookings.map((booking) => (
+          {bookings.map(booking => (
             <ReservationCard booking={booking} key={booking.id} />
           ))}
         </ul>
