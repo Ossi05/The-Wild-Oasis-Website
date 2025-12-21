@@ -1,12 +1,15 @@
 import { eachDayOfInterval } from "date-fns";
 import { supabase } from "./supabase";
-import { cache } from "react";
 import { notFound } from "next/navigation";
+import { cacheLife } from "next/cache";
 
 /////////////
 // GET
+const cacheLifeTime = "hours";
 
-export const getCabin = cache(async id => {
+export const getCabin = async id => {
+  "use cache";
+  cacheLife(cacheLifeTime);
   const { data, error } = await supabase
     .from("cabins")
     .select("*")
@@ -22,7 +25,7 @@ export const getCabin = cache(async id => {
   }
 
   return data;
-});
+};
 
 export async function getCabinPrice(id) {
   const { data, error } = await supabase
@@ -39,6 +42,8 @@ export async function getCabinPrice(id) {
 }
 
 export const getCabins = async function () {
+  "use cache";
+  cacheLife(cacheLifeTime);
   const { data, error } = await supabase
     .from("cabins")
     .select("id, name, maxCapacity, regularPrice, discount, image")

@@ -6,6 +6,7 @@
     "dev": "next dev -p 80",
     "build": "next build",
     "start": "next start",
+    "production": "npm run build && npm run start",
     "lint": "eslint"
   },
   "dependencies": {
