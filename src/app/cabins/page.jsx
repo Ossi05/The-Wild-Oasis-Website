@@ -1,12 +1,13 @@
 import CabinCard from "@/src/components/CabinCard";
+import { getCabins } from "@/src/lib/data-service";
 
 export const metadata = {
   title: "Cabins",
 };
 
-export default function CabinsPage() {
+export default async function CabinsPage() {
   // CHANGE
-  const cabins = [];
+  const cabins = await getCabins();
 
   return (
     <div>
