@@ -1,6 +1,7 @@
 import { eachDayOfInterval } from "date-fns";
 import { supabase } from "./supabase";
 import { cache } from "react";
+import { notFound } from "next/navigation";
 
 /////////////
 // GET
@@ -17,6 +18,7 @@ export const getCabin = cache(async id => {
 
   if (error) {
     console.error(error);
+    notFound();
   }
 
   return data;
