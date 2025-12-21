@@ -5,6 +5,7 @@ const nextConfig = {
     qualities: [75, 80, 100],
     remotePatterns: [new URL(process.env.CABIN_IMAGES_URL)],
   },
+  output: "export",
 };
 
 export default nextConfig;
