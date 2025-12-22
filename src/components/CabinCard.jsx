@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function CabinCard({ cabin }) {
   const { id, name, maxCapacity, regularPrice, discount, image } = cabin;
-
+  const cabinUrl = `${ROUTES.cabins}/${id}`;
   return (
     <div className="flex border-primary-800">
       <div className="flex-1 relative">
@@ -19,9 +19,11 @@ function CabinCard({ cabin }) {
       </div>
       <div className="grow">
         <div className="pt-5 pb-4 px-7 bg-primary-950">
-          <h3 className="text-accent-500 font-semibold text-2xl mb-3">
-            Cabin {name}
-          </h3>
+          <Link href={cabinUrl}>
+            <h3 className="text-accent-500 font-semibold text-2xl mb-3">
+              Cabin {name}
+            </h3>
+          </Link>
 
           <div className="flex gap-3 items-center mb-2">
             <UsersIcon className="h-5 w-5 text-primary-600" />
@@ -49,7 +51,7 @@ function CabinCard({ cabin }) {
 
         <div className="bg-primary-950 border-t border-t-primary-800 text-right">
           <Link
-            href={`${ROUTES.cabins}/${id}`}
+            href={cabinUrl}
             className="border-l border-primary-800 py-4 px-6 inline-block hover:bg-accent-600 transition-all hover:text-primary-900"
           >
             Details & reservation &rarr;

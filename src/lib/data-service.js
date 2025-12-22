@@ -2,6 +2,7 @@ import { eachDayOfInterval } from "date-fns";
 import { supabase } from "./supabase";
 import { notFound } from "next/navigation";
 import { cacheLife } from "next/cache";
+import { connection } from "next/server";
 
 /////////////
 // GET
@@ -17,7 +18,7 @@ export const getCabin = async id => {
     .single();
 
   // For testing
-  // await new Promise((res) => setTimeout(res, 1000));
+  // await new Promise(res => setTimeout(res, 1000));
 
   if (error) {
     console.error(error);
@@ -103,6 +104,7 @@ export async function getBookings(guestId) {
 }
 
 export async function getBookedDatesByCabinId(cabinId) {
+  await connection();
   let today = new Date();
   today.setUTCHours(0, 0, 0, 0);
   today = today.toISOString();
@@ -133,6 +135,8 @@ export async function getBookedDatesByCabinId(cabinId) {
 }
 
 export async function getSettings() {
+  "use cache";
+  cacheLife(cacheLifeTime);
   const { data, error } = await supabase.from("settings").select("*").single();
 
   if (error) {
