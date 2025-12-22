@@ -1,7 +1,9 @@
 "use client";
-import { isWithinInterval } from "date-fns";
+import { addDays, isWithinInterval, set } from "date-fns";
+import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { useReservation } from "../Context/ReservationContext";
 
 function isAlreadyBooked(range, datesArr) {
   return (
@@ -14,29 +16,70 @@ function isAlreadyBooked(range, datesArr) {
 }
 
 function DateSelector({ settings, cabin, bookedDates }) {
+  const { range, setRange, resetRange } = useReservation();
+  const { minBookingLength, maxBookingLength } = settings;
+
   // CHANGE
   const regularPrice = 23;
   const discount = 23;
   const numNights = 23;
   const cabinPrice = 23;
-  const range = { from: null, to: null };
-
-  // SETTINGS
-  const { minBookingLength, maxBookingLength } = settings;
 
   const endMonth = new Date();
   endMonth.setFullYear(endMonth.getFullYear() + 5);
+
+  const handleSetRange = newRange => {
+    if (!newRange) return;
+    if (range.from && !range.to && newRange.from && range.from) {
+      if (newRange.from.getTime() < range.from.getTime()) {
+        // From date is before current from date
+        setRange({ from: newRange.from, to: undefined });
+        return;
+      }
+    }
+    if (isAlreadyBooked(newRange, bookedDates)) {
+      // Date range contains booked dates
+      setRange({ from: newRange.to, to: undefined });
+      return;
+    }
+
+    setRange(newRange);
+  };
+
+  let disabledDays = [
+    ...bookedDates,
+    { before: new Date() }, // Disable past dates
+  ];
+
+  if (range?.from && !range?.to) {
+    if (minBookingLength > 1) {
+      // Disable dates before minBookingLength
+      disabledDays.push({
+        from: addDays(range.from, 1),
+        to: addDays(range.from, minBookingLength - 1),
+      });
+    }
+    if (maxBookingLength) {
+      // Disable dates after maxBookingLength
+      disabledDays.push({
+        from: addDays(range.from, maxBookingLength + 1),
+        to: set(endMonth, { hours: 23, minutes: 59, seconds: 59 }),
+      });
+    }
+  }
 
   return (
     <div className="flex flex-col justify-between">
       <DayPicker
         className="pt-12 place-self-center"
         mode="range"
-        min={minBookingLength + 1}
+        onSelect={handleSetRange}
+        selected={range}
+        min={minBookingLength}
         max={maxBookingLength}
         startMonth={new Date()}
         endMonth={endMonth}
-        disabled={{ before: new Date() }}
+        disabled={disabledDays}
         captionLayout="dropdown"
         numberOfMonths={2}
       />
