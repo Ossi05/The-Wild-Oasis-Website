@@ -1,5 +1,5 @@
 import Spinner from "@/src/components/Spinner";
 
-export default function Loading() {
+export default function AccountLoading() {
   return <Spinner />;
 }

@@ -1,13 +1,15 @@
-import CabinCard from "@/src/components/CabinCard";
 import CabinList from "@/src/components/CabinList";
 import { Suspense } from "react";
 import CabinLoading from "./loading";
+import CabinFilter from "@/src/components/CabinFilter";
 
 export const metadata = {
   title: "Cabins",
 };
 
-export default function CabinsPage() {
+export default async function CabinsPage({ searchParams }) {
+  const currSearchParams = await searchParams;
+  const filter = currSearchParams?.capacity ?? "all";
   return (
     <div>
       <h1 className="text-4xl mb-5 text-accent-400 font-medium">
@@ -22,8 +24,11 @@ export default function CabinsPage() {
         Welcome to paradise.
       </p>
 
-      <Suspense fallback={<CabinLoading />}>
-        <CabinList />
+      <div className="flex justify-end mb-8">
+        <CabinFilter />
+      </div>
+      <Suspense fallback={<CabinLoading />} key={filter}>
+        <CabinList filter={filter} />
       </Suspense>
     </div>
   );
