@@ -5,9 +5,11 @@ export const ROUTES = {
   cabins: "/cabins",
   about: "/about",
   accountRoutes: {
-    root: "/account",
+    root: "/account", // Change proxy.js, if this changes
     profile: "/account/profile",
     reservations: "/account/reservations",
   },
   editPrefix: "/edit",
+  login: "/login",
+  logout: "/logout",
 };

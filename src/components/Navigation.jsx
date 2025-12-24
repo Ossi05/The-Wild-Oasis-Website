@@ -1,7 +1,10 @@
 import Link from "next/link";
 import { ROUTES } from "@/config";
+import UserNavLink from "./UserNavLink";
+import { Suspense } from "react";
+import GuestAreaLink from "./GuestAreaLink";
 
-export default function Navigation() {
+export default async function Navigation() {
   return (
     <nav className="z-10 text-xl">
       <ul className="flex gap-16 items-center">
@@ -21,14 +24,9 @@ export default function Navigation() {
             About
           </Link>
         </li>
-        <li>
-          <Link
-            href={ROUTES.accountRoutes.root}
-            className="hover:text-accent-400 transition-colors"
-          >
-            Guest area
-          </Link>
-        </li>
+        <Suspense fallback={<GuestAreaLink />}>
+          <UserNavLink />
+        </Suspense>
       </ul>
     </nav>
   );
