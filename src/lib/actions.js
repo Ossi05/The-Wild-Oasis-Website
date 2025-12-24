@@ -17,7 +17,6 @@ export async function updateGuestAction(formData) {
   if (!session) throw new Error("You must be logged in");
   const nationalID = formData.get("nationalID");
   const [nationality, countryFlag] = formData.get("nationality").split("%");
-
   if (!isValidNationalID(nationalID))
     throw new Error("Please provide a valid national ID");
   const updatedData = { nationalID, nationality, countryFlag };
