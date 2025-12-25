@@ -1,5 +1,5 @@
 import { ROUTES } from "@/config";
-import ReservationCard from "@/src/components/ReservationCard";
+import ReservationList from "@/src/components/ReservationList";
 import { auth } from "@/src/lib/auth";
 import { getBookings } from "@/src/lib/data-service";
 import Link from "next/link";
@@ -26,11 +26,7 @@ export default async function ReservationsPage() {
           </Link>
         </p>
       ) : (
-        <ul className="space-y-6">
-          {bookings.map(booking => (
-            <ReservationCard booking={booking} key={booking.id} />
-          ))}
-        </ul>
+        <ReservationList bookings={bookings} />
       )}
     </div>
   );
