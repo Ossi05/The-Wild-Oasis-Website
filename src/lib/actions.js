@@ -3,8 +3,14 @@
 import { ROUTES } from "@/config";
 import { auth, signIn, signOut } from "./auth";
 import { isValidNationalID } from "../utils";
-import { deleteBooking, getBookings, updateGuest } from "./data-service";
+import {
+  deleteBooking,
+  getBookings,
+  updateBooking,
+  updateGuest,
+} from "./data-service";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function signInAction() {
   await signIn("google", { redirectTo: ROUTES.accountRoutes.root });
@@ -28,15 +34,43 @@ export async function updateGuestAction(formData) {
 }
 export async function deleteReservationAction(bookingId) {
   const session = await requireAuth();
-
-  const guestBookings = await getBookings(session.user.guestId);
-  const bookingIds = guestBookings.map(booking => booking.id);
-
-  if (!bookingIds.includes(bookingId))
-    throw new Error("You are not allowed to delete this booking");
+  await requireReservationOwnership(
+    session,
+    bookingId,
+    "You are not allowed to delete this booking"
+  );
 
   await deleteBooking({ bookingId, guestId: session.user.guestId });
   revalidatePath(ROUTES.accountRoutes.reservations);
+}
+export async function updateReservationAction(formData) {
+  // 1. Require auth
+  const session = await requireAuth();
+
+  // 2. Require reservation ownership
+  const bookingId = +formData.get("bookingId");
+  await requireReservationOwnership(
+    session,
+    bookingId,
+    "You are not allowed to update this booking"
+  );
+  // 3. Update reservation
+  const numGuests = +formData.get("numGuests");
+  const observations = formData.get("observations").slice(0, 1000);
+  await updateBooking(bookingId, { numGuests, observations });
+
+  // 4. Revalidate & redirect
+  revalidatePath(
+    `${ROUTES.accountRoutes.reservations}${ROUTES.editPrefix}/${bookingId}`
+  );
+  redirect(ROUTES.accountRoutes.reservations);
+}
+
+async function requireReservationOwnership(session, bookingId, errMsg) {
+  const guestBookings = await getBookings(session.user.guestId);
+
+  const bookingIds = guestBookings.map(booking => booking.id);
+  if (!bookingIds.includes(+bookingId)) throw new Error(errMsg);
 }
 
 async function requireAuth() {
