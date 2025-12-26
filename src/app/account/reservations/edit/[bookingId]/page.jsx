@@ -1,5 +1,5 @@
 import SubmitButton from "@/src/components/SubmitButton";
-import { updateReservationAction } from "@/src/lib/actions";
+import { updateBookingAction } from "@/src/lib/actions";
 import { getBooking, getCabin } from "@/src/lib/data-service";
 
 export default async function ReservationEditPage({ params }) {
@@ -14,7 +14,7 @@ export default async function ReservationEditPage({ params }) {
       </h2>
 
       <form
-        action={updateReservationAction}
+        action={updateBookingAction}
         className="bg-primary-900 py-8 px-12 text-lg flex gap-6 flex-col"
       >
         <div className="space-y-2">

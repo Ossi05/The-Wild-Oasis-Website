@@ -12,4 +12,5 @@ export const ROUTES = {
   editPrefix: "/edit",
   login: "/login",
   logout: "/logout",
+  thankYou: "/cabins/thankyou",
 };

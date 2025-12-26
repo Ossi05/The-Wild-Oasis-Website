@@ -1,6 +1,5 @@
 "use client";
 import { addDays, differenceInDays, isWithinInterval, set } from "date-fns";
-import { useState } from "react";
 import { DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
 import { useReservation } from "../Context/ReservationContext";
@@ -34,6 +33,11 @@ function DateSelector({ settings, cabin, bookedDates }) {
 
   const handleSetRange = newRange => {
     if (!newRange) return;
+
+    // Fix timezone issues by setting time to noon
+    if (newRange.from) newRange.from.setHours(12, 0, 0, 0);
+    if (newRange.to) newRange.to.setHours(12, 0, 0, 0);
+
     if (range.from && !range.to && newRange.from && range.from) {
       if (newRange.from.getTime() < range.from.getTime()) {
         // From date is before current from date

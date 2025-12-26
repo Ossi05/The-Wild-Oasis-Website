@@ -4,6 +4,7 @@ import { ROUTES } from "@/config";
 import { auth, signIn, signOut } from "./auth";
 import { isValidNationalID } from "../utils";
 import {
+  createBooking,
   deleteBooking,
   getBookings,
   updateBooking,
@@ -32,9 +33,30 @@ export async function updateGuestAction(formData) {
 
   revalidatePath(ROUTES.accountRoutes.profile);
 }
-export async function deleteReservationAction(bookingId) {
+
+export async function createBookingAction(bookingData, formData) {
   const session = await requireAuth();
-  await requireReservationOwnership(
+
+  const newBooking = {
+    ...bookingData,
+    guestId: session.user.guestId,
+    numGuests: +formData.get("numGuests"),
+    observations: formData.get("observations").slice(0, 1000),
+    extrasPrice: 0,
+    totalPrice: bookingData.cabinPrice,
+    isPaid: false,
+    hasBreakfast: false,
+    status: "unconfirmed",
+  };
+  await createBooking(newBooking);
+  revalidatePath(`${ROUTES.cabins}/${bookingData.cabinId}`);
+
+  redirect(ROUTES.thankYou);
+}
+
+export async function deleteBookingAction(bookingId) {
+  const session = await requireAuth();
+  await requireBookingOwnership(
     session,
     bookingId,
     "You are not allowed to delete this booking"
@@ -43,13 +65,13 @@ export async function deleteReservationAction(bookingId) {
   await deleteBooking({ bookingId, guestId: session.user.guestId });
   revalidatePath(ROUTES.accountRoutes.reservations);
 }
-export async function updateReservationAction(formData) {
+export async function updateBookingAction(formData) {
   // 1. Require auth
   const session = await requireAuth();
 
   // 2. Require reservation ownership
   const bookingId = +formData.get("bookingId");
-  await requireReservationOwnership(
+  await requireBookingOwnership(
     session,
     bookingId,
     "You are not allowed to update this booking"
@@ -66,7 +88,7 @@ export async function updateReservationAction(formData) {
   redirect(ROUTES.accountRoutes.reservations);
 }
 
-async function requireReservationOwnership(session, bookingId, errMsg) {
+async function requireBookingOwnership(session, bookingId, errMsg) {
   const guestBookings = await getBookings(session.user.guestId);
 
   const bookingIds = guestBookings.map(booking => booking.id);
